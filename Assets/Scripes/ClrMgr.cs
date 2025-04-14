@@ -117,6 +117,32 @@ public class ClearManager : MonoBehaviour
         float zMin = -17f;
         float zMax = 5f;
 
+        foreach (GameObject zombie in ZombieManager.Instance.GetZombies().ToArray()) // 拷贝防止迭代中修改
+        {
+            if (zombie == null) continue;
+
+            Vector3 pos = zombie.transform.position;
+
+            if (pos.x >= xMin && pos.x <= xMax &&
+                pos.y >= yMin && pos.y <= yMax &&
+                pos.z >= zMin && pos.z <= zMax)
+            {
+                Destroy(zombie);
+            }
+        }
+    }
+
+    /*void ClearZombiesInArea(int clearedLineY)
+    {
+        float yMin = clearedLineY - 1;
+        float yMax = clearedLineY + 1;
+
+        float xMin = 11f;
+        float xMax = 23f;
+
+        float zMin = -17f;
+        float zMax = 5f;
+
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
 
         foreach (GameObject zombie in zombies)
@@ -130,7 +156,7 @@ public class ClearManager : MonoBehaviour
                 Destroy(zombie);
             }
         }
-    }
+    }*/
 }
 /*using UnityEngine;
 
