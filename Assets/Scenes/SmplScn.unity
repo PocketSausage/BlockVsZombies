@@ -551,7 +551,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 975fec1a3d87f254fb8b5ad7bde5c5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverPanel: {fileID: 0}
 --- !u!114 &1489714591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -599,7 +598,7 @@ MonoBehaviour:
   - {fileID: 4789712406126915714, guid: f3660848cb202834889e1f9356a3f3bc, type: 3}
   - {fileID: 7942021627611844101, guid: 841aac1e9f867be40ad3280eb8c82869, type: 3}
   spawnPosition: {x: 5, y: 21, z: 0}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 1489714590}
 --- !u!4 &1489714594
 Transform:
   m_ObjectHideFlags: 0
