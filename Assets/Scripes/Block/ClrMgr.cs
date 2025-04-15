@@ -108,8 +108,8 @@ public class ClearManager : MonoBehaviour
 
     void ClearZombiesInArea(int clearedLineY)
     {
-        float yMin = clearedLineY - 1;
-        float yMax = clearedLineY + 1;
+        float yMin = clearedLineY-1;
+        float yMax = clearedLineY;
 
         float xMin = 11f;
         float xMax = 23f;

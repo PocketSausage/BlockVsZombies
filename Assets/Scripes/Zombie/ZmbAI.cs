@@ -11,16 +11,26 @@ public class ZombieClimber : MonoBehaviour
     public float frontCheckDistance = 0.2f;
     public State CurrentState => currentState; // 添加这一行
 
+    private Animator animator;
+
 
     private Rigidbody rb;
 
     void Start()
     {
+        
         rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody 组件未找到！请确保挂载了 Rigidbody！");
+        }
         // 初始给予一个向前的力（面对墙）
         rb.AddForce(Vector3.forward * forwardForce, ForceMode.Force);
 
         RemoveClimbable(); // 初始不可攀爬
+        animator = GetComponent<Animator>();
+                animator.SetInteger("State", 0);
+
     }
 
     void FixedUpdate()
@@ -34,11 +44,13 @@ public class ZombieClimber : MonoBehaviour
             case State.Stop:
                 if (forwardVelocity > velocityThreshold)
                 {
+                    animator.SetInteger("State", 1);
                     currentState = State.Run;
                     RemoveClimbable();
                     rb.AddForce(Vector3.forward * forwardForce, ForceMode.Force);
                 }else if (frontHasClimbable)
                 {
+                    animator.SetInteger("State", 2);
                     currentState = State.Climb;
                     RemoveClimbable();
                     //AddClimbable();
@@ -54,6 +66,7 @@ public class ZombieClimber : MonoBehaviour
                 {
                     if (frontHasClimbable)
                     {
+                        animator.SetInteger("State", 2);
                         currentState = State.Climb;
                         RemoveClimbable();
                         //AddClimbable();
@@ -63,6 +76,7 @@ public class ZombieClimber : MonoBehaviour
                     }
                     else
                     {
+                        animator.SetInteger("State", 0);
                         currentState = State.Stop;
                         AddClimbable();
                         rb.AddForce(Vector3.forward * forwardForce, ForceMode.Force);
