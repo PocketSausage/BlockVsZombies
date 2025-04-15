@@ -19,12 +19,19 @@ public class Generator : MonoBehaviour
 
         GameObject next = Instantiate(tetrominoPrefabs[index], spawnPosition, Quaternion.identity);
 
+        BlockInfo bif = next.GetComponent<BlockInfo>();
+        GameObject ghost = Instantiate(bif.ghostPrefab, spawnPosition, Quaternion.identity);
+            //ghost.GetComponent<Generator>().Init(ghost.transform); // 传入实际方块的 Transform
+        
+        
         if (IsOccupied(next))
         {
-            Destroy(next); // 不要让出界方块残留
+            Destroy(next);
+            Destroy(ghost);// 不要让出界方块残留
             gameManager.GameOver(); // 立即游戏结束
         }
         next.AddComponent<Controller>();
+        next.GetComponent<BlockInfo>().ghostPrefab = ghost;
     }
 
     bool IsOccupied(GameObject tetromino)

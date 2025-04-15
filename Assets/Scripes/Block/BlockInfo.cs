@@ -8,5 +8,6 @@ public enum BlockType
 public class BlockInfo : MonoBehaviour
 {
     public BlockType type;
+    public GameObject ghostPrefab;
 }
 

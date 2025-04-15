@@ -1,3 +1,6 @@
+
+
+
 using UnityEngine;
 
 public class Controller : MonoBehaviour
@@ -10,16 +13,20 @@ public class Controller : MonoBehaviour
     private Generator generator;
     private bool rotateClockwiseNext;
     private BlockInfo blockInfo;
+    private Transform ghost;
+    
 
     void Start()
     {
         generator = GameObject.FindObjectOfType<Generator>();
         rotateClockwiseNext = true;
         blockInfo = GetComponent<BlockInfo>();
+        ghost = blockInfo.ghostPrefab.transform;
     }
 
     void Update()
     {
+        LowDown();
         if (Input.GetKey(KeyCode.DownArrow))
         {
             currentFallTime = fastFallTime; // 快速下落
@@ -32,20 +39,39 @@ public class Controller : MonoBehaviour
         if (fallTimer >= currentFallTime)
         {
             TryMove(Vector3.down);
+            ghost.position=transform.position;
+            LowDown();
             fallTimer = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) TryMove(Vector3.left);
-        if (Input.GetKeyDown(KeyCode.RightArrow)) TryMove(Vector3.right);
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            TryMove(Vector3.left);
+            ghost.position=transform.position;
+            LowDown();
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            TryMove(Vector3.right);
+            ghost.position=transform.position;
+            LowDown();
+        }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             TryRotate();
+            LowDown();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            transform.position=ghost.position;
+            SitDown();
         }
     }
 
     void TryRotate()
     {
-        string blockName = gameObject.name;
+        //string blockName = gameObject.name;
 
         // 禁止 O 方块旋转
         if (blockInfo.type == BlockType.O) return;
@@ -66,36 +92,54 @@ public class Controller : MonoBehaviour
 
         // 尝试旋转
         transform.Rotate(0, 0, angle);
+        ghost.Rotate(0, 0, angle);
+        
 
         // 若旋转后不合法，则撤销
-        if (!IsValidPosition())
+        if (!IsValidPosition(transform))
         {
             transform.Rotate(0, 0, -angle);
+            ghost.Rotate(0, 0, -angle);
         }
     }
 
+    void LowDown()
+    {
+        while(IsValidPosition(ghost))
+        {ghost.position += Vector3.down;}
+        ghost.position -= Vector3.down;
+
+        
+    }
 
     void TryMove(Vector3 direction)
     {
         transform.position += direction;
 
-        if (!IsValidPosition())
+        if (!IsValidPosition(transform))
         {
             transform.position -= direction;
 
             if (direction == Vector3.down)
             {
-                SetBlocksToGrid();
-                this.enabled = false;
-                GameObject.FindObjectOfType<ClearManager>().CheckAndClearLines();
-                rotateClockwiseNext = true;
+                SitDown();
             }
         }
     }
 
-    bool IsValidPosition()
+    void SitDown()
     {
-        foreach (Transform block in transform)
+        SetBlocksToGrid();
+        this.enabled = false;
+        
+        GameObject.FindObjectOfType<ClearManager>().CheckAndClearLines();
+        rotateClockwiseNext = true;
+        Destroy(ghost.gameObject);
+    }
+
+    bool IsValidPosition(Transform goal)
+    {
+        foreach (Transform block in goal)
         {
             if (GridManager.IsCellOccupied(block.position))
                 return false;

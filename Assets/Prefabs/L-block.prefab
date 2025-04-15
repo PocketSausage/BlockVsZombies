@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 6
+  ghostPrefab: {fileID: 4336967081778452898, guid: 21dc73f00f36ca842988f3d2a08991e5, type: 3}
 --- !u!1001 &1728916402614688279
 PrefabInstance:
   m_ObjectHideFlags: 0

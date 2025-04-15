@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
+  ghostPrefab: {fileID: 727408686101684458, guid: 39d130833e8529a4d8bd0f3c334743d8, type: 3}
 --- !u!1 &733755388125787602
 GameObject:
   m_ObjectHideFlags: 0
