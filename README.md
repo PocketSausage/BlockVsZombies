@@ -1,7 +1,7 @@
 
-# TetrisZombieDefense（俄罗斯方块僵尸防御）
+# BlockVsZombies（俄罗尸方块）
 
-一个使用 Unity 开发的创意小游戏，将经典的俄罗斯方块玩法与僵尸防御机制结合在一起。
+一个使用 Unity 开发的创意小游戏，将经典的俄罗斯方块玩法与防御僵尸结合在一起。
 
 ---
 
@@ -9,8 +9,8 @@
 
 - 玩家控制下落的俄罗斯方块（七种形状）
 - 每秒自动下落一次，支持左右移动与旋转
-- 填满整行即可自动消除
-- 僵尸会不断靠近顶部区域，如果撞到顶墙，则玩家“失去一点生命”
+- 填满整行即可自动消除，同时对应行的僵尸被消灭
+- 僵尸会不断靠近顶部区域，如果到达顶部，则玩家“失去一点生命”
 - 顶部有一个血条（初始值为 10），血条归零则游戏失败
 
 ---
@@ -47,19 +47,39 @@
 
 ```
 Assets/
-├── Prefabs/             # 俄罗斯方块和僵尸预制体
-├── Scripts/
-│   ├── Generator.cs         # 结构生成器
-│   ├── Controller.cs        # 控制结构体移动和旋转
-│   ├── ClearManager.cs      # 行消除逻辑
-│   ├── HealthManager.cs     # 顶部血条管理
-│   ├── ZombieManager.cs     # 僵尸生成与注册
-│   ├── GameManager.cs       # 游戏流程控制
-│   └── UI 控制脚本等
-├── Scenes/
-│   ├── StartScene
-│   ├── GameScene
-│   └── GameOverScene
+├── Materials/                        # 材质资源文件夹
+│
+├── Prefabs/                          # 游戏中的所有预制体（方块、僵尸等）
+│
+├── Scenes/                           # Unity 场景
+│   ├── GameO.unity                  # 结束界面
+│   ├── GameS.unity                  # 开始界面
+│   └── SmplScn.unity                # 主游戏界面
+│
+└── Scripts/
+    │
+    ├── Block/                        # 方块相关逻辑
+    │   ├── BlockInfo.cs             # 方块信息识别
+    │   ├── BsCtrl.cs                # 方块控制（移动、旋转、碰撞）
+    │   ├── ClrMgr.cs                # 行消除逻辑
+    │   ├── Generator.cs             # 方块生成器
+    │   └── GrdMgr.cs                # 方块在网格中的位置管理
+    │
+    ├── Game/                         # 游戏状态控制相关
+    │   ├── GmMgr.cs                 # 游戏失败判定：结构无法生成
+    │   ├── HealthMgr.cs             # 顶部血量管理
+    │   ├── OverMenu.cs              # 游戏结束菜单逻辑
+    │   ├── StartMenu.cs             # 开始菜单按钮控制
+    │   └── Trigger.cs               # 血量条触发逻辑（僵尸接触顶部扣血）
+    │
+    └── Zombie/                       # 僵尸相关逻辑
+        ├── ClmbSurf.cs              # 可爬墙面检测
+        ├── ZmbAI.cs                 # 僵尸行为控制（行走、爬墙）
+        ├── ZmbDbgClr.cs             # 尸潮颜色调试（可视化效果）
+        ├── ZmbLife.cs               # 僵尸生命周期（死亡、被清除）
+        ├── ZmbMgr.cs                # 僵尸统一管理器（注册、清除）
+        └── ZmbSpwnr.cs              # 僵尸生成器（包含对象池机制）
+
 ```
 
 ---
@@ -68,18 +88,18 @@ Assets/
 
 1. 克隆本仓库：
    ```bash
-   git clone https://github.com/你的用户名/TetrisZombieDefense.git
+   git clone https://github.com/PocketSausage/BlockVsZombies.git
    ```
 
-2. 打开 Unity，选择 `TetrisZombieDefense` 项目目录
+2. 打开 Unity，选择 `zombie` 项目目录
 
-3. 打开 `StartScene` 并点击运行按钮（▶）
+3. 打开 `GameS` 并点击运行按钮（▶）
 
 ---
 
 ## 📌 后续计划（To Do）
 
-- [ ] 僵尸动画与AI完善
+- [ ] 僵尸动画完善
 - [ ] 增加关卡与速度难度提升
 - [ ] 增加天赋卡系统
 - [ ] 加入音效与特效反馈
